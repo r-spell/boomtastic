@@ -25,7 +25,7 @@ module Formtastic
     #   </form>
     #
     # @see Formtastic::Helpers::InputsHelper#input InputsHelper#input for full documentation of all possible options.
-    class TextInput 
+    class OriginalTextInput 
       include Base
       include Base::Placeholder
       
@@ -43,6 +43,29 @@ module Formtastic
         end
       end
     
+    end
+
+    class TextInput < OriginalTextInput
+      def input_html_options
+        s = super
+        old_class = s[:class]
+        new_class = old_class.present? ? (old_class + ' form-control') : 'form-control'
+        s.merge(class: new_class)
+      end
+
+      def wrapper_html_options
+        s = super
+        old_class = s[:class]
+        new_class = old_class.present? ? (old_class + ' form-group') : 'form-group'
+        s.merge(class: new_class)
+      end
+
+      def label_html_options
+        s = super
+        old_class = s[:class] || []
+        new_class = old_class + ['control-label']-['label']
+        s.merge(class: new_class)
+      end
     end
   end
 end

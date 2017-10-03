@@ -195,7 +195,6 @@ module Formtastic
     end
 
     class CheckBoxesInput < OriginalCheckBoxesInput
-
       def choice_wrapping_html_options(choice)
         classes = ['checkbox']
         classes << "#{sanitized_method_name.singularize}_#{choice_html_safe_value(choice)}" if value_as_class?

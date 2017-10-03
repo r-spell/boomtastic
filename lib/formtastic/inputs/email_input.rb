@@ -37,6 +37,7 @@ module Formtastic
         end
       end
     end
+
     class EmailInput < OriginalEmailInput
       def input_html_options
         s = super
@@ -58,6 +59,5 @@ module Formtastic
         the_super.merge(class: new_class)
       end
     end
-
   end
 end
