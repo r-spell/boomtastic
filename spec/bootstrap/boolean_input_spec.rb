@@ -25,16 +25,16 @@ describe 'boolean input' do
   # it_should_have_input_wrapper_with_id("post_allow_comments_input")
   # it_should_apply_error_logic_for_input_type(:boolean)
 
-  # it 'should generate a label containing the input' do
-  #   output_buffer.should_not have_tag('label.label')
-  #   output_buffer.should have_tag('form div.form-group span.form-wrapper label', :count => 1)
-  #   output_buffer.should have_tag('form div.form-group span.form-wrapper label.control-label', :count => 1)
-  #   output_buffer.should have_tag('form div.form-group span.form-wrapper label[@for="post_allow_comments"]')
-  #   output_buffer.should have_tag('form div.form-group span.form-wrapper label', /Allow comments/)
-  #   output_buffer.should have_tag('form div.form-group span.form-wrapper label input[@type="checkbox"]', :count => 1)
-  #   output_buffer.should have_tag('form div.form-group input[@type="hidden"]', :count => 1)
-  #   output_buffer.should_not have_tag('form div.form-group span.form-wrapper label input[@type="hidden"]', :count => 1) # invalid HTML5
-  # end
+  it 'should generate a label containing the input' do
+    output_buffer.should_not have_tag('label.label')
+    output_buffer.should have_tag('form div.form-group span.form-wrapper label', :count => 1)
+    output_buffer.should have_tag('form div.form-group span.form-wrapper label.control-label', :count => 1)
+    output_buffer.should have_tag('form div.form-group span.form-wrapper label[@for="post_allow_comments"]')
+    output_buffer.should have_tag('form div.form-group span.form-wrapper label', /Allow comments/)
+    output_buffer.should have_tag('form div.form-group span.form-wrapper label input[@type="checkbox"]', :count => 1)
+    output_buffer.should have_tag('form div.form-group input[@type="hidden"]', :count => 1)
+    output_buffer.should_not have_tag('form div.form-group span.form-wrapper label input[@type="hidden"]', :count => 1) # invalid HTML5
+  end
 
   # it 'should not add a "name" attribute to the label' do
   #   output_buffer.should_not have_tag('form div.form-group span.form-wrapper label[@name]')
