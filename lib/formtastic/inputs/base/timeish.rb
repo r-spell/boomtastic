@@ -90,23 +90,42 @@ module Formtastic
       # @todo Could we take the rendering from Rails' helpers and inject better HTML in and around it rather than re-inventing the whee?
       module Timeish
         
+        #~# def to_html
+        #~#   input_wrapping do
+        #~#     fragments_wrapping do
+        #~#       hidden_fragments <<
+        #~#       fragments_label <<
+        #~#       template.content_tag(:ol,
+        #~#         fragments.map do |fragment|
+        #~#           fragment_wrapping do
+        #~#             fragment_label_html(fragment) <<
+        #~#             fragment_input_html(fragment)
+        #~#           end
+        #~#         end.join.html_safe, # TODO is this safe?
+        #~#         { :class => 'fragments-group' } # TODO refactor to fragments_group_wrapping
+        #~#       )
+        #~#     end
+        #~#   end
+        #~# end
         def to_html
           input_wrapping do
             fragments_wrapping do
               hidden_fragments <<
               fragments_label <<
-              template.content_tag(:ol,
+              template.content_tag(:div,
                 fragments.map do |fragment|
                   fragment_wrapping do
                     fragment_label_html(fragment) <<
                     fragment_input_html(fragment)
                   end
                 end.join.html_safe, # TODO is this safe?
-                { :class => 'fragments-group' } # TODO refactor to fragments_group_wrapping
+                { :class => 'row' } # TODO refactor to fragments_group_wrapping
               )
             end
           end
         end
+
+
         
         def fragments
           date_fragments + time_fragments
@@ -124,16 +143,32 @@ module Formtastic
           [:year, :month, :day]
         end
         
-        def fragment_wrapping(&block)
-          template.content_tag(:li, template.capture(&block), fragment_wrapping_html_options)
+        #~# def fragment_wrapping(&block)
+        #~#   template.content_tag(:li, template.capture(&block), fragment_wrapping_html_options)
+        #~# end
+        def fragment_wrapping(&block) # remove <li> and all it's class
+          template.content_tag(:div, template.capture(&block), fragment_wrapping_html_options)
         end
         
+        #~# def fragment_wrapping_html_options
+        #~#   { :class => 'fragment' }
+        #~# end
         def fragment_wrapping_html_options
-          { :class => 'fragment' }
+          { :class => 'col-xs-4' }
         end
         
+        #~# def fragment_label(fragment)
+        #~#   labels_from_options = options.key?(:labels) ? options[:labels] : {}
+        #~#   if !labels_from_options
+        #~#     ''
+        #~#   elsif labels_from_options.key?(fragment)
+        #~#     labels_from_options[fragment]
+        #~#   else
+        #~#     ::I18n.t(fragment.to_s, :default => fragment.to_s.humanize, :scope => [:datetime, :prompts])
+        #~#   end
+        #~# end
         def fragment_label(fragment)
-          labels_from_options = options.key?(:labels) ? options[:labels] : {}
+          labels_from_options = options[:labels] # default to no label. was: options.key?(:labels) ? options[:labels] : {}
           if !labels_from_options
             ''
           elsif labels_from_options.key?(fragment)
@@ -195,23 +230,36 @@ module Formtastic
           end
         end
         
+        #~# def fragments_wrapping(&block)
+        #~#   template.content_tag(:fieldset,
+        #~#     template.capture(&block).html_safe, 
+        #~#     fragments_wrapping_html_options
+        #~#   )
+        #~# end
         def fragments_wrapping(&block)
-          template.content_tag(:fieldset,
-            template.capture(&block).html_safe, 
-            fragments_wrapping_html_options
-          )
+          block.call            # muah ha ha, no more fieldset!
         end
         
         def fragments_wrapping_html_options
           { :class => "fragments" }
         end
         
+        #~# def fragments_label
+        #~#   if render_label?
+        #~#     template.content_tag(:legend, 
+        #~#       builder.label(method, label_text, :for => fragment_id(fragments.first)), 
+        #~#       :class => "label"
+        #~#     )
+        #~#   else
+        #~#     "".html_safe
+        #~#   end
+        #~# end
         def fragments_label
           if render_label?
-            template.content_tag(:legend, 
-              builder.label(method, label_text, :for => fragment_id(fragments.first)), 
-              :class => "label"
-            )
+            #This makes legend go away and shows label for DateSelectInput
+            template.content_tag(:label,label_text,
+                                 update_class_on_options( label_html_options, add_class:'control-label', remove_class: 'label'))
+
           else
             "".html_safe
           end
@@ -234,7 +282,16 @@ module Formtastic
             "#{object_name}[#{fragment_name(fragment)}]"
           end
         end
-        
+
+        private
+        #=># launchcode
+        def update_class_on_options(options, add_class:, remove_class:)
+          old_class = options[:class] || []
+          new_class = old_class.dup
+          new_class << add_class if add_class
+          new_class = new_class - [remove_class] if remove_class
+          options.merge(class: new_class)
+        end
       end
     end
   end

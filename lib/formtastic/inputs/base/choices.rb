@@ -3,30 +3,43 @@ module Formtastic
     module Base
       module Choices
 
+        #~# def choices_wrapping(&block)
+        #~#   template.content_tag(:fieldset,
+        #~#     template.capture(&block),
+        #~#     choices_wrapping_html_options
+        #~#   )
+        #~# end
         def choices_wrapping(&block)
-          template.content_tag(:fieldset,
-            template.capture(&block),
-            choices_wrapping_html_options
-          )
+          block.call            # muah ha ha, no more fieldset!
         end
+
 
         def choices_wrapping_html_options
           { :class => "choices" }
         end
 
+        #~# def choices_group_wrapping(&block)
+        #~#   template.content_tag(:ol,
+        #~#     template.capture(&block),
+        #~#     choices_group_wrapping_html_options
+        #~#   )
+        #~# end
         def choices_group_wrapping(&block)
-          template.content_tag(:ol,
-            template.capture(&block),
-            choices_group_wrapping_html_options
-          )
+          template.capture(&block) # remove wrapping <ol> and all its class - needed for radio buttons on candidate application
         end
 
         def choices_group_wrapping_html_options
           { :class => "choices-group" }
         end
 
+        #~# def choice_wrapping(html_options, &block)
+        #~#   template.content_tag(:li,
+        #~#     template.capture(&block),
+        #~#     html_options
+        #~#   )
+        #~# end
         def choice_wrapping(html_options, &block)
-          template.content_tag(:li,
+          template.content_tag(:div,
             template.capture(&block),
             html_options
           )
@@ -85,16 +98,29 @@ module Formtastic
           options[:value_as_class]
         end
 
+        #~# def legend_html
+        #~#   if render_label?
+        #~#     template.content_tag(:legend,
+        #~#       template.content_tag(:label, label_text),
+        #~#       label_html_options.merge(:class => "label")
+        #~#     )
+        #~#   else
+        #~#     "".html_safe
+        #~#   end
+        #~# end
         def legend_html
           if render_label?
-            template.content_tag(:legend,
-              template.content_tag(:label, label_text),
-              label_html_options.merge(:class => "label")
-            )
+            # we took away the <legend> for ???I forget why???
+            # we preserve the <label> and add control-label for radio buttons
+            # we're not sure that whyever we took away the legend is happy about having the label added back in. It's in our TODOs
+            template.content_tag(:label,label_text,
+                                 update_class_on_options( label_html_options, add_class:'control-label', remove_class: 'label'))
+
           else
             "".html_safe
           end
         end
+
 
         # Override to remove the for attribute since this isn't associated with any element, as it's
         # nested inside the legend.
@@ -102,6 +128,15 @@ module Formtastic
           super.merge(:for => nil)
         end
 
+        private
+        #=># launchcode
+        def update_class_on_options(options, add_class:, remove_class:)
+          old_class = options[:class] || []
+          new_class = old_class.dup
+          new_class << add_class if add_class
+          new_class = new_class - [remove_class] if remove_class
+          options.merge(class: new_class)
+        end
       end
     end
   end

@@ -3,16 +3,25 @@ module Formtastic
     module Base
       module Hints
         
+        #~# def hint_html
+        #~#   if hint?
+        #~#     template.content_tag(
+        #~#       :p, 
+        #~#       Formtastic::Util.html_safe(hint_text), 
+        #~#       :class => builder.default_hint_class
+        #~#     )
+        #~#   end
+        #~# end
         def hint_html
           if hint?
             template.content_tag(
-              :p, 
-              Formtastic::Util.html_safe(hint_text), 
-              :class => builder.default_hint_class
+              :span,
+              hint_text.html_safe,
+              :class => 'help-block'
             )
           end
-        end
-        
+        end        
+
         def hint?
           !hint_text.blank? && !hint_text.kind_of?(Hash)
         end

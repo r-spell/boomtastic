@@ -29,7 +29,7 @@ module Formtastic
     #   <%= f.input :published, :checked_value => "yes", :unchecked_value => "no" %>
     #
     # @see Formtastic::Helpers::InputsHelper#input InputsHelper#input for full documentation of all possible options.
-    class BooleanInput
+    class OriginalBooleanInput
       include Base
 
       def to_html
@@ -113,6 +113,22 @@ module Formtastic
         end
       end
       
+    end
+
+    class BooleanInput < OriginalBooleanInput
+      def wrapper_html_options
+        s = super
+        old_class = s[:class]
+        new_class = old_class.present? ? (old_class + ' checkbox') : 'checkbox'
+        s.merge(class: new_class)
+      end
+
+      def label_html_options
+        s = super
+        old_class = s[:class] || []
+        new_class = old_class + ['control-label']
+        s.merge(class: new_class)
+      end
     end
   end
 end
