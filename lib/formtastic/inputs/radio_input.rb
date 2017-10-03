@@ -166,6 +166,32 @@ module Formtastic
         new_class_arr = old_class.split(' ') + ['radio_buttons', 'form-group'] - ['radio']
         s.merge(class: new_class_arr.join(' '))
       end
+
+
+
+      #TODO: review/refactor? Basically copied from Formtastic source
+      def choice_wrapping_html_options(choice)
+        classes = ['radio']
+        classes << "#{sanitized_method_name.singularize}_#{choice_html_safe_value(choice)}" if value_as_class?
+        { :class => classes.join(" ") }
+      end
+
+      private
+      def update_class_on_super(the_super, add_class:, remove_class:)
+        old_class = the_super[:class] || []
+        new_class = old_class.dup
+        new_class << add_class if add_class
+        new_class = new_class - [remove_class] if remove_class
+        the_super.merge(class: new_class)
+      end
+
+      def update_class_on_options(options, add_class:, remove_class:)
+        old_class = options[:class] || []
+        new_class = old_class.dup
+        new_class << add_class if add_class
+        new_class = new_class - [remove_class] if remove_class
+        options.merge(class: new_class.join(' '))
+      end
     end
   end
 end
