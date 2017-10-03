@@ -25,7 +25,7 @@ module Formtastic
     #   </form>
     #
     # @see Formtastic::Helpers::InputsHelper#input InputsHelper#input for full documentation of all possible options.
-    class EmailInput 
+    class OriginalEmailInput 
       include Base
       include Base::Stringish
       include Base::Placeholder
@@ -35,6 +35,29 @@ module Formtastic
           label_html <<
           builder.email_field(method, input_html_options)
         end
+      end
+    end
+
+    class EmailInput < OriginalEmailInput
+      def input_html_options
+        s = super
+        old_class = s[:class]
+        new_class = old_class.present? ? (old_class + ' form-control') : 'form-control'
+        s.merge(class: new_class)
+      end
+
+      def label_html_options
+        update_class_on_super(super, add_class:'control-label', remove_class: 'label')
+      end
+
+
+      private
+      def update_class_on_super(the_super, add_class:, remove_class:)
+        old_class = the_super[:class] || []
+        new_class = old_class.dup
+        new_class << add_class if add_class
+        new_class = new_class - [remove_class] if remove_class
+        the_super.merge(class: new_class)
       end
     end
   end

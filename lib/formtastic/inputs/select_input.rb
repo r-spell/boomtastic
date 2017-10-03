@@ -153,7 +153,7 @@ module Formtastic
     # @see Formtastic::Inputs::RadioInput RadioInput as an alternative for `belongs_to` associations
     #
     # @todo Do/can we support the per-item HTML options like RadioInput?
-    class SelectInput
+    class OriginalSelectInput
       include Base
       include Base::Collections
 
@@ -230,6 +230,29 @@ module Formtastic
         !multiple?
       end
 
+    end
+
+    class SelectInput < OriginalSelectInput
+      def input_html_options
+        s = super
+        old_class = s[:class]
+        new_class = old_class.present? ? (old_class + ' form-control') : 'form-control'
+        s.merge(class: new_class)
+      end
+
+      def wrapper_html_options
+        s = super
+        old_class = s[:class]
+        new_class = old_class.present? ? (old_class + ' form-group') : 'form-group'
+        s.merge(class: new_class)
+      end
+
+      def label_html_options
+        s = super
+        old_class = s[:class] || []
+        new_class = old_class + ['control-label']-['label']
+        s.merge(class: new_class)
+      end
     end
   end
 end

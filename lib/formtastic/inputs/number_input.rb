@@ -67,7 +67,7 @@ module Formtastic
     #
     # @see Formtastic::Helpers::InputsHelper#input InputsHelper#input for full documentation of all possible options.
     # @see http://api.rubyonrails.org/classes/ActiveModel/Validations/HelperMethods.html#method-i-validates_numericality_of Rails' Numericality validation documentation
-    class NumberInput 
+    class OriginalNumberInput 
       include Base
       include Base::Numeric
       include Base::Placeholder
@@ -82,7 +82,29 @@ module Formtastic
       def step_option
         super || "any"
       end
+    end
 
+    class NumberInput < OriginalNumberInput
+      def input_html_options
+        s = super
+        old_class = s[:class]
+        new_class = old_class.present? ? (old_class + ' form-control') : 'form-control'
+        s.merge(class: new_class)
+      end
+
+      def wrapper_html_options
+        s = super
+        old_class = s[:class]
+        new_class = old_class.present? ? (old_class + ' form-group') : 'form-group'
+        s.merge(class: new_class)
+      end
+
+      def label_html_options
+        s = super
+        old_class = s[:class] || []
+        new_class = old_class + ['control-label']-['label']
+        s.merge(class: new_class)
+      end
     end
   end
 end
