@@ -64,7 +64,7 @@ module Formtastic
     # @see Formtastic::Inputs::BooleanInput BooleanInput for a single checkbox for boolean (checked = true) inputs
     #
     # @todo Do/can we support the per-item HTML options like RadioInput?
-    class CheckBoxesInput
+    class OriginalCheckBoxesInput
       include Base
       include Base::Collections
       include Base::Choices
@@ -191,6 +191,30 @@ module Formtastic
         else
           []
         end
+      end
+    end
+
+    class CheckBoxesInput < OriginalCheckBoxesInput
+
+      def choice_wrapping_html_options(choice)
+        classes = ['checkbox']
+        classes << "#{sanitized_method_name.singularize}_#{choice_html_safe_value(choice)}" if value_as_class?
+        { :class => classes.join(" ") }
+      end
+
+      def label_html_options
+        s = super
+        old_class = s[:class] || []
+        new_class = old_class + ['control-label']
+        s.merge(class: new_class)
+      end
+
+      def choice_html(choice)
+        template.content_tag(
+          :label,
+          checkbox_input(choice) + choice_label(choice),
+          label_html_options.merge(:for => choice_input_dom_id(choice), :class => 'choice')
+        )
       end
     end
   end

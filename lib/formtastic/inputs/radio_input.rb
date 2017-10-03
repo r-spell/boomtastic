@@ -36,7 +36,7 @@ module Formtastic
     # the `:collection` option, or augmented with I18n translations. See examples below.
     #
     # The way on which Formtastic renders the `value` attribute and label for each choice in the `:collection` is
-    # customisable (see examples below). When not provided, we fall back to a list of methods to try on each 
+    # customisable (see examples below). When not provided, we fall back to a list of methods to try on each
     # object such as `:to_label`, `:name` and `:to_s`, which are defined in the configurations
     # `collection_label_methods` and `collection_value_methods`.
     #
@@ -124,17 +124,17 @@ module Formtastic
     # @see Formtastic::Inputs::RadioInput as an alternative for `belongs_to` associations
     #
     # @todo :disabled like CheckBoxes?
-    class RadioInput
+    class OriginalRadioInput
       include Base
       include Base::Collections
       include Base::Choices
-      
+
       def to_html
         input_wrapping do
           choices_wrapping do
             legend_html <<
             choices_group_wrapping do
-              collection.map { |choice| 
+              collection.map { |choice|
                 choice_wrapping(choice_wrapping_html_options(choice)) do
                   choice_html(choice)
                 end
@@ -144,20 +144,28 @@ module Formtastic
         end
       end
 
-      def choice_html(choice)        
+      def choice_html(choice)
         template.content_tag(:label,
-          builder.radio_button(input_name, choice_value(choice), input_html_options.merge(choice_html_options(choice)).merge(:required => false)) << 
+          builder.radio_button(input_name, choice_value(choice), input_html_options.merge(choice_html_options(choice)).merge(:required => false)) <<
           choice_label(choice),
           label_html_options.merge(:for => choice_input_dom_id(choice), :class => nil)
         )
       end
-      
+
       # Override to remove the for attribute since this isn't associated with any element, as it's
       # nested inside the legend.
       def label_html_options
         super.merge(:for => nil)
       end
+    end
 
+    class RadioInput < OriginalRadioInput
+      def wrapper_html_options
+        s = super
+        old_class = s[:class]
+        new_class_arr = old_class.split(' ') + ['radio_buttons', 'form-group'] - ['radio']
+        s.merge(class: new_class_arr.join(' '))
+      end
     end
   end
 end

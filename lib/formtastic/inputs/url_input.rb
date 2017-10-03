@@ -25,16 +25,39 @@ module Formtastic
     #   </form>
     #
     # @see Formtastic::Helpers::InputsHelper#input InputsHelper#input for full documentation of all possible options.
-    class UrlInput 
+    class OriginalUrlInput
       include Base
       include Base::Stringish
       include Base::Placeholder
-      
+
       def to_html
         input_wrapping do
           label_html <<
           builder.url_field(method, input_html_options)
         end
+      end
+    end
+
+    class UrlInput < OriginalUrlInput
+      def input_html_options
+        s = super
+        old_class = s[:class]
+        new_class = old_class.present? ? (old_class + ' form-control') : 'form-control'
+        s.merge(class: new_class)
+      end
+
+      def wrapper_html_options
+        s = super
+        old_class = s[:class]
+        new_class = old_class.present? ? (old_class + ' form-group') : 'form-group'
+        s.merge(class: new_class)
+      end
+
+      def label_html_options
+        s = super
+        old_class = s[:class] || []
+        new_class = old_class + ['control-label']-['label']
+        s.merge(class: new_class)
       end
     end
   end

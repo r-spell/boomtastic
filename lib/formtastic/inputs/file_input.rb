@@ -29,13 +29,29 @@ module Formtastic
     #   </form>
     #
     # @see Formtastic::Helpers::InputsHelper#input InputsHelper#input for full documentation of all possible options.
-    class FileInput
+    class OriginalFileInput
       include Base
       def to_html
         input_wrapping do
           label_html <<
           builder.file_field(method, input_html_options)
         end
+      end
+    end
+    class FileInput < OriginalFileInput
+      # NOTE: if you put form-control on input for file it makes admin edit page messed up
+      def label_html_options
+        s = super
+        old_class = s[:class] || []
+        new_class = old_class + ['control-label']
+        s.merge(class: new_class)
+      end
+
+      def wrapper_html_options
+        s = super
+        old_class = s[:class]
+        new_class = old_class.present? ? (old_class + ' form-group') : 'form-group'
+        s.merge(class: new_class)
       end
     end
   end
