@@ -176,22 +176,22 @@ module Formtastic
         { :class => classes.join(" ") }
       end
 
-      private
-      def update_class_on_super(the_super, add_class:, remove_class:)
-        old_class = the_super[:class] || []
-        new_class = old_class.dup
-        new_class << add_class if add_class
-        new_class = new_class - [remove_class] if remove_class
-        the_super.merge(class: new_class)
-      end
+      # private
+      # def update_class_on_super(the_super, add_class:, remove_class:)
+      #   old_class = the_super[:class] || []
+      #   new_class = old_class.dup
+      #   new_class << add_class if add_class
+      #   new_class = new_class - [remove_class] if remove_class
+      #   the_super.merge(class: new_class)
+      # end
 
-      def update_class_on_options(options, add_class:, remove_class:)
-        old_class = options[:class] || []
-        new_class = old_class.dup
-        new_class << add_class if add_class
-        new_class = new_class - [remove_class] if remove_class
-        options.merge(class: new_class.join(' '))
-      end
+      # def update_class_on_options(options, add_class:, remove_class:)
+      #   old_class = options[:class] || []
+      #   new_class = old_class.dup
+      #   new_class << add_class if add_class
+      #   new_class = new_class - [remove_class] if remove_class
+      #   options.merge(class: new_class.join(' '))
+      # end
     end
   end
 end

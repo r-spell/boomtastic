@@ -1,17 +1,17 @@
 module Formtastic
   module Inputs
     module Base
-      # Timeish inputs (`:date_select`, `:datetime_select`, `:time_select`) are similar to the Rails date and time 
+      # Timeish inputs (`:date_select`, `:datetime_select`, `:time_select`) are similar to the Rails date and time
       # helpers (`date_select`, `datetime_select`, `time_select`), rendering a series of `<select>`
-      # tags for each fragment (year, month, day, hour, minute, seconds). The fragments are then 
+      # tags for each fragment (year, month, day, hour, minute, seconds). The fragments are then
       # re-combined to a date by ActiveRecord through multi-parameter assignment.
       #
-      # The mark-up produced by Rails is simple but far from ideal, with no way to label the 
+      # The mark-up produced by Rails is simple but far from ideal, with no way to label the
       # individual fragments for accessibility, no fieldset to group the related fields, and no
-      # legend describing the group. Formtastic addresses this within the standard `<li>` wrapper 
-      # with a `<fieldset>` with a `<legend>` as a label, followed by an ordered list (`<ol>`) of 
+      # legend describing the group. Formtastic addresses this within the standard `<li>` wrapper
+      # with a `<fieldset>` with a `<legend>` as a label, followed by an ordered list (`<ol>`) of
       # list items (`<li>`), one for each fragment (year, month, ...). Each `<li>` fragment contains
-      # a `<label>` (eg "Year") for the fragment, and a `<select>` containing `<option>`s (eg a 
+      # a `<label>` (eg "Year") for the fragment, and a `<select>` containing `<option>`s (eg a
       # range of years).
       #
       # In the supplied formtastic.css file, the resulting mark-up is styled to appear a lot like a
@@ -54,7 +54,7 @@ module Formtastic
       #       </ol>
       #     </fieldset>
       #   </form>
-      #       
+      #
       #
       # @example `:time_select` input
       #   <%= f.input :publish_at, :as => :time_select %>
@@ -89,7 +89,7 @@ module Formtastic
       # @todo Check what other Rails options are supported (`start_year`, `end_year`, `use_month_numbers`, `use_short_month`, `add_month_numbers`, `prompt`), write tests for them, and otherwise support them
       # @todo Could we take the rendering from Rails' helpers and inject better HTML in and around it rather than re-inventing the whee?
       module Timeish
-        
+
         #~# def to_html
         #~#   input_wrapping do
         #~#     fragments_wrapping do
@@ -126,37 +126,37 @@ module Formtastic
         end
 
 
-        
+
         def fragments
           date_fragments + time_fragments
         end
-        
+
         def time_fragments
           options[:include_seconds] ? [:hour, :minute, :second] : [:hour, :minute]
         end
-        
+
         def date_fragments
           options[:order] || i18n_date_fragments || default_date_fragments
         end
-        
+
         def default_date_fragments
           [:year, :month, :day]
         end
-        
+
         #~# def fragment_wrapping(&block)
         #~#   template.content_tag(:li, template.capture(&block), fragment_wrapping_html_options)
         #~# end
         def fragment_wrapping(&block) # remove <li> and all it's class
           template.content_tag(:div, template.capture(&block), fragment_wrapping_html_options)
         end
-        
+
         #~# def fragment_wrapping_html_options
         #~#   { :class => 'fragment' }
         #~# end
         def fragment_wrapping_html_options
           { :class => 'col-xs-4' }
         end
-        
+
         #~# def fragment_label(fragment)
         #~#   labels_from_options = options.key?(:labels) ? options[:labels] : {}
         #~#   if !labels_from_options
@@ -177,29 +177,29 @@ module Formtastic
             ::I18n.t(fragment.to_s, :default => fragment.to_s.humanize, :scope => [:datetime, :prompts])
           end
         end
-        
+
         def fragment_id(fragment)
           "#{input_html_options[:id]}_#{position(fragment)}i"
         end
-        
+
         def fragment_name(fragment)
           "#{method}(#{position(fragment)}i)"
         end
-        
+
         def fragment_label_html(fragment)
           text = fragment_label(fragment)
           text.blank? ? "".html_safe : template.content_tag(:label, text, :for => fragment_id(fragment))
         end
-        
+
         def value
           object.send(method) if object && object.respond_to?(method)
         end
-        
+
         def fragment_input_html(fragment)
           opts = input_options.merge(:prefix => fragment_prefix, :field_name => fragment_name(fragment), :default => value, :include_blank => include_blank?)
           template.send(:"select_#{fragment}", value, opts, input_html_options.merge(:id => fragment_id(fragment)))
         end
-        
+
         def fragment_prefix
           if builder.options.key?(:index)
             object_name + "[#{builder.options[:index]}]"
@@ -207,20 +207,20 @@ module Formtastic
             object_name
           end
         end
-        
+
         # TODO extract to BlankOptions or similar -- Select uses similar code
         def include_blank?
           options.key?(:include_blank) ? options[:include_blank] : builder.include_blank_for_select_by_default
         end
-        
+
         def positions
           { :year => 1, :month => 2, :day => 3, :hour => 4, :minute => 5, :second => 6 }
         end
-        
+
         def position(fragment)
           positions[fragment]
         end
-        
+
         def i18n_date_fragments
           order = ::I18n.t(:order, :scope => [:date])
           if order.is_a?(Array)
@@ -229,25 +229,25 @@ module Formtastic
             nil
           end
         end
-        
+
         #~# def fragments_wrapping(&block)
         #~#   template.content_tag(:fieldset,
-        #~#     template.capture(&block).html_safe, 
+        #~#     template.capture(&block).html_safe,
         #~#     fragments_wrapping_html_options
         #~#   )
         #~# end
         def fragments_wrapping(&block)
           block.call            # muah ha ha, no more fieldset!
         end
-        
+
         def fragments_wrapping_html_options
           { :class => "fragments" }
         end
-        
+
         #~# def fragments_label
         #~#   if render_label?
-        #~#     template.content_tag(:legend, 
-        #~#       builder.label(method, label_text, :for => fragment_id(fragments.first)), 
+        #~#     template.content_tag(:legend,
+        #~#       builder.label(method, label_text, :for => fragment_id(fragments.first)),
         #~#       :class => "label"
         #~#     )
         #~#   else
@@ -264,17 +264,17 @@ module Formtastic
             "".html_safe
           end
         end
-        
+
         def fragments_inner_wrapping(&block)
           template.content_tag(:ol,
             template.capture(&block)
           )
         end
-        
+
         def hidden_fragments
           "".html_safe
         end
-        
+
         def hidden_field_name(fragment)
           if builder.options.key?(:index)
             "#{object_name}[#{builder.options[:index]}][#{fragment_name(fragment)}]"
@@ -283,15 +283,15 @@ module Formtastic
           end
         end
 
-        private
-        #=># launchcode
-        def update_class_on_options(options, add_class:, remove_class:)
-          old_class = options[:class] || []
-          new_class = old_class.dup
-          new_class << add_class if add_class
-          new_class = new_class - [remove_class] if remove_class
-          options.merge(class: new_class)
-        end
+        # private
+        # #=># launchcode
+        # def update_class_on_options(options, add_class:, remove_class:)
+        #   old_class = options[:class] || []
+        #   new_class = old_class.dup
+        #   new_class << add_class if add_class
+        #   new_class = new_class - [remove_class] if remove_class
+        #   options.merge(class: new_class)
+        # end
       end
     end
   end

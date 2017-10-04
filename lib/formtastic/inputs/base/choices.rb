@@ -128,15 +128,15 @@ module Formtastic
           super.merge(:for => nil)
         end
 
-        private
+        # private
         #=># launchcode
-        def update_class_on_options(options, add_class:, remove_class:)
-          old_class = options[:class] || []
-          new_class = old_class.dup
-          new_class << add_class if add_class
-          new_class = new_class - [remove_class] if remove_class
-          options.merge(class: new_class)
-        end
+        # def update_class_on_options(options, add_class:, remove_class:)
+        #   old_class = options[:class] || []
+        #   new_class = old_class.dup
+        #   new_class << add_class if add_class
+        #   new_class = new_class - [remove_class] if remove_class
+        #   options.merge(class: new_class)
+        # end
       end
     end
   end

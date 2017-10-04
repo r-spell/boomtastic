@@ -47,17 +47,17 @@ module Formtastic
       end
 
       def label_html_options
-        update_class_on_super(super, add_class:'control-label', remove_class: 'label')
+        update_class_on_options(super, add_class:'control-label', remove_class: 'label')
       end
 
-      private
-      def update_class_on_super(the_super, add_class:, remove_class:)
-        old_class = the_super[:class] || []
-        new_class = old_class.dup
-        new_class << add_class if add_class
-        new_class = new_class - [remove_class] if remove_class
-        the_super.merge(class: new_class)
-      end
+      # private
+      # def update_class_on_super(the_super, add_class:, remove_class:)
+      #   old_class = the_super[:class] || []
+      #   new_class = old_class.dup
+      #   new_class << add_class if add_class
+      #   new_class = new_class - [remove_class] if remove_class
+      #   the_super.merge(class: new_class)
+      # end
     end
   end
 end
