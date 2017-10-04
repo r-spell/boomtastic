@@ -28,6 +28,17 @@ We have only updated the following input types.  [Further hacking or patching] m
 
 You should have Rails and Bootstrap.  If you don't have those you probably don't need this gem anyway.
 
+## How to Add
+
+To add this gem, add the following code to your `Gemfile`
+
+```
+gem 'formtastic', github: 'r-spell/boomtastic', branch: 'boomtastic'
+
+```
+
+You will need to do a `bundle install` after saving your Gemfile and before running your Rails app.
+
 ## Project Sources and Specs
 
 Boomtastic was built on [Formtastic](https://github.com/justinfrench/formtastic).  Indeed this repository is a fork of Formtastic. The limited specs for our hacking are found in `specs/bootsrap`.  These specs use the [Formtastic-Bootstrap](https://github.com/mjbellantoni/formtastic-bootstrap) specs as a template, and should all be passing.  Other specs in this repository are the original Formtastic `3.1-Stable` specs and due to our massive amounts of hacking these will (and should) fail.
