@@ -1,6 +1,6 @@
 # Boomtastic
 
-[Formtastic](https://github.com/justinfrench/formtastic) is fantastic form builder, and [Bootstrap](http://getbootstrap.com/2.3.2/) is a great front-end framework.  [Formtastic-Bootstrap](https://github.com/mjbellantoni/formtastic-bootstrap) used to combine them but it is no longer supported.  Boomtastic is our far less comprehensive replacement for Formtastic-Bootstrap.  
+[Formtastic](https://github.com/justinfrench/formtastic) is fantastic form builder, and [Bootstrap](http://getbootstrap.com) is a great front-end framework.  [Formtastic-Bootstrap](https://github.com/mjbellantoni/formtastic-bootstrap) used to combine them but it is no longer supported.  Boomtastic is our far less comprehensive replacement for Formtastic-Bootstrap.  
 
 ## Intended Audience  
 
