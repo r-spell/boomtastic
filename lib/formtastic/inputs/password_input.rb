@@ -25,7 +25,7 @@ module Formtastic
     #   </form>
     #
     # @see Formtastic::Helpers::InputsHelper#input InputsHelper#input for full documentation of all possible options.
-    class PasswordInput 
+    class OriginalPasswordInput 
       include Base
       include Base::Stringish
       include Base::Placeholder
@@ -37,5 +37,15 @@ module Formtastic
         end
       end
     end
+
+    class PasswordInput < OriginalPasswordInput
+      def input_html_options
+        s = super
+        old_class = s[:class]
+        new_class = old_class.present? ? (old_class + ' form-control') : 'form-control'
+        s.merge(class: new_class)
+      end
+    end
+
   end
 end

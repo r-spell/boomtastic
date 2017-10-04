@@ -38,6 +38,7 @@ module Formtastic
         end
       end
     end
+
     class FileInput < OriginalFileInput
       # NOTE: if you put form-control on input for file it makes admin edit page messed up
       def label_html_options
