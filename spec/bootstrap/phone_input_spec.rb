@@ -17,7 +17,7 @@ describe 'phone input' do
       end)
     end
 
-    it 'has a working output buffer, yo yo' do
+    it 'has expected DOM structure' do
       output_buffer.should_not have_tag('label.label')
       output_buffer.should have_tag('form div.phone.form-group label.control-label', :count => 1)
         # output_buffer.should have_tag('form div.email.form-group span.form-wrapper', :count => 1)

@@ -20,7 +20,7 @@ describe 'check_boxes input' do
       end)
     end
 
-    it 'has a working output buffer, yo yo' do
+    it 'has expected DOM structure' do
       output_buffer.should_not have_tag('form div.choice label.label')
       output_buffer.should have_tag('form div.check_boxes.form-group label.control-label', :count => 1)
       # output_buffer.should have_tag('form div.form-group', :count => 1)

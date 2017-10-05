@@ -21,7 +21,7 @@ describe 'password input' do
       end)
     end
 
-    it 'has expected dom structure' do
+    it 'has expected DOM structure' do
       output_buffer.should have_tag('form div.form-group input.form-control', count: 2) # not really sure why it occurs twice, TBH
     end
   end

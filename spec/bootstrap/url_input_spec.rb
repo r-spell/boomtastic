@@ -16,7 +16,7 @@ describe 'url input' do
         concat(builder.input(:url))
       end)
     end
-    it 'has expected dom structure' do
+    it 'has expected DOM structure' do
       output_buffer.should_not have_tag('label.label')
       output_buffer.should have_tag('form div.form-group label.control-label', :count => 1)
       output_buffer.should have_tag('form div.form-group.url input.form-control', :count => 1)

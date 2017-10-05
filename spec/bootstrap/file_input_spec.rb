@@ -14,7 +14,7 @@ describe 'file input' do
     end)
   end
 
-  it 'has expected dom structure' do
+  it 'has expected DOM structure' do
     output_buffer.should have_tag('label.label') # this was actually present in formtastic-bootstrap, who are we to disallow it?
     output_buffer.should have_tag('form div.form-group label.control-label', :count => 1)
   end
