@@ -14,14 +14,10 @@ describe 'boolean input' do
     end)
   end
 
-  it 'loads file' do
-    expect(true).to be(true)
-  end
 
-
-  it 'has a working output buffer, yo yo' do
+  it 'has expected DOM structure' do
     output_buffer.should_not have_tag('label.label')
-    output_buffer.should have_tag('form div.form-group label.control-label', :count => 1)
+    output_buffer.should have_tag('form label.control-label', :count => 1)
   end
 
 end

@@ -50,7 +50,7 @@ module Formtastic
           label_html_options
         )
       end
-      
+
       def label_html_options
         {
           :for => input_html_options[:id],
@@ -81,7 +81,7 @@ module Formtastic
       def input_html_options
         {:name => input_html_options_name}.merge(super)
       end
-      
+
       def input_html_options_name
         if builder.options.key?(:index)
           "#{object_name}[#{builder.options[:index]}][#{method}]"
@@ -91,10 +91,10 @@ module Formtastic
       end
 
       def checked?
-        object && boolean_checked?(object.send(method), checked_value) 
+        object && boolean_checked?(object.send(method), checked_value)
       end
-      
-      private 
+
+      private
 
       def boolean_checked?(value, checked_value)
         case value
@@ -112,15 +112,12 @@ module Formtastic
           value.to_i != 0
         end
       end
-      
+
     end
 
     class BooleanInput < OriginalBooleanInput
       def wrapper_html_options
-        s = super
-        old_class = s[:class]
-        new_class = old_class.present? ? (old_class + ' checkbox') : 'checkbox'
-        s.merge(class: new_class)
+        update_class_on_options(super, add_class:'checkbox', remove_class: 'form-group')
       end
 
       def label_html_options

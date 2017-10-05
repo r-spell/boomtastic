@@ -74,9 +74,15 @@ module Formtastic
       private
       def update_class_on_options(options, add_class:, remove_class:)
         old_class = options[:class] || []
+        if old_class.is_a?(String)
+          old_class = old_class.split(' ')
+        end
         new_class = old_class.dup
         new_class << add_class if add_class
         new_class = new_class - [remove_class] if remove_class
+        if options[:class].is_a?(String)
+          new_class = new_class.join(' ')
+        end
         options.merge(class: new_class)
       end
     end
